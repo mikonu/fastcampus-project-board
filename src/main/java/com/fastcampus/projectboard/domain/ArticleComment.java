@@ -28,6 +28,10 @@ public class ArticleComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Setter
+    @ManyToOne(optional = false)
+    private Article article;
+
     @Setter @Column(nullable = false, length = 500) private String content;
 
     @CreatedDate @Column(nullable = false) private LocalDateTime createdAt;
@@ -37,12 +41,13 @@ public class ArticleComment {
 
     protected ArticleComment() {}
 
-    private ArticleComment(String content) {
+    private ArticleComment(Article article, String content) {
+        this.article = article;
         this.content = content;
     }
 
-    public static ArticleComment of(String content) {
-        return new ArticleComment(content);
+    public static ArticleComment of(Article article, String content) {
+        return new ArticleComment(article, content);
     }
 
     @Override
@@ -51,7 +56,8 @@ public class ArticleComment {
         if (!(o instanceof ArticleComment that)) return false;
 
         if (this.getId() == null) {
-            return Objects.equals(this.getContent(), that.getContent()) &&
+            return Objects.equals(this.getArticle(), that.getArticle()) &&
+                    Objects.equals(this.getContent(), that.getContent()) &&
                     Objects.equals(this.getCreatedAt(), that.getCreatedAt()) &&
                     Objects.equals(this.getCreatedBy(), that.getCreatedBy()) &&
                     Objects.equals(this.getModifiedAt(), that.getModifiedAt()) &&
@@ -64,7 +70,7 @@ public class ArticleComment {
     @Override
     public int hashCode() {
         if (getId() == null) {
-            return Objects.hash(getContent(), getCreatedAt(), getCreatedBy(), getModifiedAt(), getModifiedBy());
+            return Objects.hash(getArticle(), getContent(), getCreatedAt(), getCreatedBy(), getModifiedAt(), getModifiedBy());
         }
 
         return Objects.hash(getId());
