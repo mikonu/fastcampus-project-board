@@ -19,16 +19,42 @@ class JpaRepositoryTest {
 
     @Nested
     @DisplayName("인-메모리 DB 테스트")
-    @Import(JpaConfig.class)
-    @DataJpaTest
-    class InMemoryDBTest {
-
-        private final ArticleRepository articleRepository;
-        private final ArticleCommentRepository articleCommentRepository;
+    class InMemoryDBTest extends DBTest {
 
         public InMemoryDBTest(
                 @Autowired ArticleRepository articleRepository,
                 @Autowired ArticleCommentRepository articleCommentRepository
+        ) {
+            super(articleRepository, articleCommentRepository);
+        }
+
+    }
+
+    @Nested
+    @DisplayName("실제 DB 테스트")
+    @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+    class ActualDBTest extends DBTest {
+
+        public ActualDBTest(
+                @Autowired ArticleRepository articleRepository,
+                @Autowired ArticleCommentRepository articleCommentRepository
+        ) {
+            super(articleRepository, articleCommentRepository);
+        }
+
+    }
+
+
+    @Import(JpaConfig.class)
+    @DataJpaTest
+    private abstract class DBTest {
+
+        private final ArticleRepository articleRepository;
+        private final ArticleCommentRepository articleCommentRepository;
+
+        public DBTest(
+                ArticleRepository articleRepository,
+                ArticleCommentRepository articleCommentRepository
         ) {
             this.articleRepository = articleRepository;
             this.articleCommentRepository = articleCommentRepository;
@@ -92,77 +118,7 @@ class JpaRepositoryTest {
             assertThat(articleRepository.count()).isEqualTo(previousArticleCount - 1);
             assertThat(articleCommentRepository.count()).isEqualTo(previousArticleCommentCount - deletedCommentsSize);
         }
-    }
 
-
-    @Nested
-    @DisplayName("실제 DB 테스트")
-    @Import(JpaConfig.class)
-    @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-    @DataJpaTest
-    class ActualDBTest {
-
-        @Autowired private ArticleRepository articleRepository;
-        @Autowired private ArticleCommentRepository articleCommentRepository;
-
-        @DisplayName("select 테스트")
-        @Test
-        void givenTestData_whenSelecting_thenWorksFine() {
-            // Given
-
-            // When
-            List<Article> articles = articleRepository.findAll();
-
-            // Then
-            assertThat(articles)
-                    .isNotNull()
-                    .hasSize(123);
-        }
-
-        @DisplayName("insert 테스트")
-        @Test
-        void givenTestData_whenInserting_thenWorksFine() {
-            // Given
-            long previousCount = articleRepository.count();
-
-            // When
-            articleRepository.save(Article.of("new article", "new content", "#spring"));
-
-            // Then
-            assertThat(articleRepository.count()).isEqualTo(previousCount + 1);
-        }
-
-        @DisplayName("update 테스트")
-        @Test
-        void givenTestData_whenUpdating_thenWorksFine() {
-            // Given
-            Article article = articleRepository.findById(1L).orElseThrow();
-            String updatedHashtag = "#springboot";
-            article.setHashtag(updatedHashtag);
-
-            // When
-            Article savedArticle = articleRepository.saveAndFlush(article);
-
-            // Then
-            assertThat(savedArticle).hasFieldOrPropertyWithValue("hashtag", updatedHashtag);
-        }
-
-        @DisplayName("delete 테스트")
-        @Test
-        void givenTestData_whenDeleting_thenWorksFine() {
-            // Given
-            Article article = articleRepository.findById(1L).orElseThrow();
-            long previousArticleCount = articleRepository.count();
-            long previousArticleCommentCount = articleCommentRepository.count();
-            int deletedCommentsSize = article.getArticleComments().size();
-
-            // When
-            articleRepository.delete(article);
-
-            // Then
-            assertThat(articleRepository.count()).isEqualTo(previousArticleCount - 1);
-            assertThat(articleCommentRepository.count()).isEqualTo(previousArticleCommentCount - deletedCommentsSize);
-        }
     }
 
 }
