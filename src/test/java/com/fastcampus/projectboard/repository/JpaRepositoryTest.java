@@ -2,6 +2,7 @@ package com.fastcampus.projectboard.repository;
 
 import com.fastcampus.projectboard.domain.Article;
 import com.fastcampus.projectboard.domain.UserAccount;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +26,7 @@ class JpaRepositoryTest {
 
     @Nested
     @DisplayName("인-메모리 DB 테스트")
+    @ActiveProfiles("test")
     class InMemoryDBTest extends DBTest {
 
         public InMemoryDBTest(
@@ -37,6 +40,7 @@ class JpaRepositoryTest {
     }
 
     @Nested
+    @Disabled("실제 DB 테스트용 DB 인증 정보를 준비하지 않았기 때문에 비활성화.")
     @DisplayName("실제 DB 테스트")
     @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
     class ActualDBTest extends DBTest {
