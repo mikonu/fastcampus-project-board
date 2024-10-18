@@ -1,6 +1,6 @@
 package com.fastcampus.projectboard.controller;
 
-import com.fastcampus.projectboard.config.SecurityConfig;
+import com.fastcampus.projectboard.config.TestSecurityConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("[Controller] 메인 컨트롤러 테스트")
-@Import(SecurityConfig.class)
+@Import(TestSecurityConfig.class)
 @WebMvcTest(MainController.class)
 class MainControllerTest {
 
