@@ -3,7 +3,6 @@ package com.fastcampus.projectboard.domain;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -15,7 +14,6 @@ import java.util.Objects;
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy")
 })
-@EntityListeners(AuditingEntityListener.class)
 @Entity
 public class ArticleComment extends AuditingFields {
 
@@ -28,6 +26,7 @@ public class ArticleComment extends AuditingFields {
     private Article article;
 
     @Setter
+    @JoinColumn(name = "userId")
     @ManyToOne(optional = false)
     private UserAccount userAccount;
 

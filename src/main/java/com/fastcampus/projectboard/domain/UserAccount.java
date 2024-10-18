@@ -10,7 +10,6 @@ import java.util.Objects;
 @Getter
 @ToString
 @Table(indexes = {
-        @Index(columnList = "userId", unique = true),
         @Index(columnList = "email", unique = true),
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy")
@@ -19,10 +18,9 @@ import java.util.Objects;
 public class UserAccount extends AuditingFields {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(length = 50)
+    private String userId;
 
-    @Setter @Column(nullable = false) private String userId;
     @Setter @Column(nullable = false) private String userPassword;
 
     @Setter private String email;
@@ -50,9 +48,8 @@ public class UserAccount extends AuditingFields {
         if (this == o) return true;
         if (!(o instanceof UserAccount that)) return false;
 
-        if (this.getId() == null) {
-            return Objects.equals(this.getUserId(), that.getUserId()) &&
-                    Objects.equals(this.getUserPassword(), that.getUserPassword()) &&
+        if (this.getUserId() == null) {
+            return Objects.equals(this.getUserPassword(), that.getUserPassword()) &&
                     Objects.equals(this.getEmail(), that.getEmail()) &&
                     Objects.equals(this.getNickname(), that.getNickname()) &&
                     Objects.equals(this.getMemo(), that.getMemo()) &&
@@ -62,16 +59,16 @@ public class UserAccount extends AuditingFields {
                     Objects.equals(this.getModifiedBy(), that.getModifiedBy());
         }
 
-        return Objects.equals(this.getId(), that.getId());
+        return Objects.equals(this.getUserId(), that.getUserId());
     }
 
     @Override
     public int hashCode() {
-        if (this.getId() == null) {
-            return Objects.hash(getUserId(), getUserPassword(), getEmail(), getNickname(), getMemo(), getCreatedAt(), getCreatedBy(), getModifiedAt(), getModifiedBy());
+        if (this.getUserId() == null) {
+            return Objects.hash(getUserPassword(), getEmail(), getNickname(), getMemo(), getCreatedAt(), getCreatedBy(), getModifiedAt(), getModifiedBy());
         }
 
-        return Objects.hash(getId());
+        return Objects.hash(getUserId());
     }
 
 }
