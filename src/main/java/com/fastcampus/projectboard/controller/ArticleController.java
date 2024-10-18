@@ -70,7 +70,7 @@ public class ArticleController {
         map.addAttribute("paginationBarNumbers", barNumbers);
         map.addAttribute("searchType", SearchType.HASHTAG);
 
-       return "articles/search-hashtag";
+        return "articles/search-hashtag";
     }
 
     @GetMapping("/form")
