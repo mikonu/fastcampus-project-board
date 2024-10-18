@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
-@DisplayName("비즈니스 로직 - 페이지네이션")
+@DisplayName("[Service] 페이지네이션 서비스 테스트")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = PaginationService.class)
 class PaginationServiceTest {
 
