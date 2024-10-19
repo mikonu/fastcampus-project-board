@@ -16,7 +16,7 @@ public class ArticleCommentController {
 
     private final ArticleCommentService articleCommentService;
 
-    @PostMapping ("/new")
+    @PostMapping("/new")
     public String postNewArticleComment(ArticleCommentRequest articleCommentRequest) {
         // TODO: 인증 정보를 넣어줘야 한다.
         articleCommentService.saveArticleComment(articleCommentRequest.toDto(UserAccountDto.of(
@@ -27,7 +27,7 @@ public class ArticleCommentController {
         return "redirect:/articles/" + articleCommentRequest.articleId();
     }
 
-    @PostMapping ("/{commentId}/delete")
+    @PostMapping("/{commentId}/delete")
     public String deleteArticleComment(@PathVariable Long commentId, Long articleId) {
         articleCommentService.deleteArticleComment(commentId);
 
